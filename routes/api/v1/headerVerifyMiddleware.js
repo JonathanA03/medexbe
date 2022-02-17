@@ -1,5 +1,5 @@
 const verifyApiHeaderToken = (req, res, next) => {
-  const { apitoken } = req.headers;
+  const apitoken = req.get("apitoken");
   if (apitoken) {
     if (apitoken === process.env.API_TOKEN) {
       return next();
@@ -17,4 +17,5 @@ const sendUnauthorized = (res) => {
 
 module.exports = {
   verifyApiHeaderToken,
+  sendUnauthorized,
 };
