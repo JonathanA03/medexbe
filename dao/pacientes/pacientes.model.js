@@ -57,7 +57,11 @@ class Pacientes {
     return await this.collection.updateOne(filter, updateCmd);
   }
 
-  async deleteOne(id) {}
+  async deleteOne(id) {
+    const fitler = {_id: new ObjectId(id)};
+
+    return await this.collection.deleteOne(fitler);
+  }
 }
 
 module.exports = Pacientes;
