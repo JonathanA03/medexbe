@@ -62,7 +62,7 @@ class Pacientes {
   async updateOne(id, nombres, apellidos, identidad, telefono, correo) {
     const filter = { _id: new ObjectId(id) };
     const updateCmd = {
-      '$set': {
+      "$set": {
         nombres,
         apellidos,
         identidad,
@@ -70,6 +70,36 @@ class Pacientes {
         correo,
       },
     };
+    return await this.collection.updateOne(filter, updateCmd);
+  }
+
+  async updateAddTag(id, tagEntry){
+    const updateCmd = {
+      "$push": {
+        tags: tagEntry
+      }
+    }
+    const filter = {_id: new ObjectId(id)};
+    return await this.collection.updateOne(filter, updateCmd);
+  }
+
+  async updateAddTagSet(id, tagEntry){
+    const updateCmd = {
+      "$addToSet": {
+        tags: tagEntry
+      }
+    }
+    const filter = {_id: new ObjectId(id)};
+    return await this.collection.updateOne(filter, updateCmd);
+  }
+
+  async updatePopTag(id, tagEntry){
+    const updateCmd = {
+      "$pop": {
+        tags: tagEntry
+      }
+    }
+    const filter = {_id: new ObjectId(id)};
     return await this.collection.updateOne(filter, updateCmd);
   }
 
