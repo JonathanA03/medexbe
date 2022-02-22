@@ -53,14 +53,14 @@ router.get("/facet/:page/:items", async (req, res) => {
   }
 });
 //revisar
-router.get("/byname/:name/:page/:items", async (req, res) => {
-  const name = req.params.name;
+router.get("/byidentity/:identity/:page/:items", async (req, res) => {
+  const identity = req.params.identity;
   const page = parseInt(req.params.page, 10);
   const items = parseInt(req.params.items, 10);
   if (allowedItemsNumber.includes(items)) {
     try {
       const expedientes = await expedienteModel.getFaceted(page, items, {
-        nombres: name,
+        identidad: identity,
       });
       res.status(200).json({ docs: expedientes });
     } catch (ex) {

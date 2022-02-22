@@ -92,7 +92,7 @@ class Pacientes {
     const filter = {_id: new ObjectId(id)};
     return await this.collection.updateOne(filter, updateCmd);
   }
-
+//en proceso de correción
   async updatePopTag(id, tagEntry){
     const updateCmd = {
       "$pop": {
