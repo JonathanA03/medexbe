@@ -73,39 +73,57 @@ class Pacientes {
     return await this.collection.updateOne(filter, updateCmd);
   }
 
-  async updateAddTag(id, tagEntry){
+  async updateAddTag(id, tagEntry) {
     const updateCmd = {
       "$push": {
-        tags: tagEntry
-      }
-    }
-    const filter = {_id: new ObjectId(id)};
+        tags: tagEntry,
+      },
+    };
+    const filter = { _id: new ObjectId(id) };
     return await this.collection.updateOne(filter, updateCmd);
   }
 
-  async updateAddTagSet(id, tagEntry){
+  async updateAddTagSet(id, tagEntry) {
     const updateCmd = {
       "$addToSet": {
-        tags: tagEntry
-      }
-    }
-    const filter = {_id: new ObjectId(id)};
+        tags: tagEntry,
+      },
+    };
+    const filter = { _id: new ObjectId(id) };
     return await this.collection.updateOne(filter, updateCmd);
   }
-//en proceso de correción
-  async updatePopTag(id, tagEntry){
-    const updateCmd = {
-      "$pop": {
-        tags: tagEntry
-      }
-    }
-    const filter = {_id: new ObjectId(id)};
+  //en proceso de correción
+  async updatePopTag(id, tagEntry) {
+    const updateCmd = [
+      {
+        "$set": {
+          "tags": {
+            "$let": {
+              "vars": { "ix": { "$indexOfArray": ["$tags", tagEntry] } },
+              "in": {
+                "$concatArrays": [
+                  { "$slice": ["$tags", 0, { "$add": [1, "$$ix"] }] },
+                  [],
+                  {
+                    "$slice": [
+                      "$tags",
+                      { "$add": [2, "$$ix"] },
+                      { "$size": "$tags" },
+                    ],
+                  },
+                ],
+              },
+            },
+          },
+        },
+      },
+    ];
+    const filter = { _id: new ObjectId(id) };
     return await this.collection.updateOne(filter, updateCmd);
   }
 
   async deleteOne(id) {
     const fitler = { _id: new ObjectId(id) };
-
     return await this.collection.deleteOne(fitler);
   }
 }
