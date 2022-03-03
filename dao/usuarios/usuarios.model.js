@@ -3,6 +3,7 @@ const getDb = require("../mongodb");
 const bcrypt = require("bcryptjs");
 
 let db = null;
+
 class Usuarios {
   collection = null;
   constructor() {
@@ -26,6 +27,7 @@ class Usuarios {
         console.error(err);
       });
   }
+
   async new(email, password, roles = []) {
     const newUsuario = {
       email,
@@ -35,11 +37,13 @@ class Usuarios {
     const rslt = await this.collection.insertOne(newUsuario);
     return rslt;
   }
+
   async getAll() {
     const cursor = this.collection.find({});
     const documents = await cursor.toArray();
     return documents;
   }
+
   async getFaceted(page, items, filter = {}) {
     const cursor = this.collection.find(filter);
     const totalItems = await cursor.count();
@@ -54,19 +58,23 @@ class Usuarios {
       resultados,
     };
   }
+
   async getById(id) {
     const _id = new ObjectId(id);
     const filter = { _id };
     const myDocument = await this.collection.findOne(filter);
     return myDocument;
   }
+
   async getByEmail(email) {
     const filter = { email };
     return await this.collection.findOne(filter);
   }
+
   async hashPassword(rawPassword) {
     return await bcrypt.hash(rawPassword, 10);
   }
+
   async comparePassword(rawPassword, dbPassword) {
     return await bcrypt.compare(rawPassword, dbPassword);
   }
