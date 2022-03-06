@@ -8,7 +8,7 @@ const seguridadRoutes = require("./seguridad/seguridad");
 //const expredientesRoutes = require('./expredientes/expredientes');
 router.use(passport.initialize());
 //public
-router.use("/seguridad", seguridadRoutes);
+router.use("/seguridad",verifyApiHeaderToken, seguridadRoutes);
 
 //middlewares
 router.use("/pacientes", verifyApiHeaderToken, jwtMiddleware, pacientesRoutes);
