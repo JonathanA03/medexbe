@@ -1,13 +1,17 @@
 const express = require("express");
 const router = express.Router();
 const jwt = require("jsonwebtoken");
+const { validateCreate } = require("./validators")
 const Usuarios = require("../../../../dao/usuarios/usuarios.model");
 const usuariosModel = new Usuarios();
 
-router.post("/signin", async (req, res) => {
+router.post("/signin", validateCreate ,async (req, res) => {
   try {
     const { email, password } = req.body;
     //TODO: realizar validaciones de entrada de datos
+    /*if (!email) {
+      res.status(403).json({status: "Ingrese un correo"});
+    }*/
     let rslt = await usuariosModel.new(email, password);
 
     res.status(200).json({ status: "success", result: rslt });
